@@ -2,12 +2,14 @@ import { useEffect, useState, useCallback } from 'react';
 import FileUpload from './components/FileUpload';
 import DocumentList from './components/DocumentList';
 import ChatPanel from './components/ChatPanel';
+import DebugPanel from './components/DebugPanel';
 import { getDocuments } from './api';
 
 export default function App() {
   const [documents, setDocuments] = useState([]);
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [debugOpen, setDebugOpen] = useState(false);
 
   const refresh = useCallback(async () => {
     const docs = await getDocuments();
@@ -58,12 +60,21 @@ export default function App() {
         {selectedDoc && (
           <div className="px-4 py-2 border-b text-sm text-gray-500 flex items-center justify-between">
             <span>📄 {selectedDoc.filename}</span>
-            <button onClick={() => setSelectedDoc(null)} className="text-gray-400 hover:text-gray-600">✕</button>
+            <div className="flex gap-2">
+              <button onClick={() => setDebugOpen(!debugOpen)} className={`text-xs px-2 py-0.5 rounded ${debugOpen ? 'bg-orange-500 text-white' : 'bg-gray-200'}`}>🔍 Debug</button>
+              <button onClick={() => setSelectedDoc(null)} className="text-gray-400 hover:text-gray-600">✕</button>
+            </div>
+          </div>
+        )}
+        {!selectedDoc && (
+          <div className="px-4 py-2 border-b text-sm text-gray-500 flex justify-end">
+            <button onClick={() => setDebugOpen(!debugOpen)} className={`text-xs px-2 py-0.5 rounded ${debugOpen ? 'bg-orange-500 text-white' : 'bg-gray-200'}`}>🔍 Debug</button>
           </div>
         )}
         <div className="flex-1 min-h-0">
           <ChatPanel selectedDoc={selectedDoc} />
         </div>
+        {debugOpen && <DebugPanel selectedDoc={selectedDoc} />}
       </div>
     </div>
   );

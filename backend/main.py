@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.config import settings
 from backend.database import init_db
-from backend.routers import documents, qa
+from backend.routers import documents, qa, debug
 
 app = FastAPI(title="Doküman Analiz", version="0.1.0")
 
@@ -16,6 +16,7 @@ app.add_middleware(
 
 app.include_router(documents.router)
 app.include_router(qa.router)
+app.include_router(debug.router)
 
 
 @app.on_event("startup")
