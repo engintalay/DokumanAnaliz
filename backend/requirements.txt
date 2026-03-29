@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic-settings
+python-dotenv
+httpx
+chromadb
+PyMuPDF
+python-multipart
