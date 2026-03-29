@@ -19,25 +19,33 @@ async def get_embedding(text: str) -> list[float]:
 
 
 def chunk_text(text: str, doc_id: int) -> list[dict]:
-    """Metni chunk'lara böler. HTML tag'lerini temizler."""
+    """Metni chunk'lara böler. HTML tag'lerini temizler. Soru numaralarından bölmeyi dener."""
     import re
     clean = re.sub(r'<[^>]+>', ' ', text)
     clean = re.sub(r'\s+', ' ', clean).strip()
 
+    # Soru numaralarından bölmeyi dene (ör: "7. Bir", "8. Bir")
+    parts = re.split(r'(?=\b\d{1,3}\.\s+[A-ZÇĞİÖŞÜa-zçğıöşü])', clean)
+    parts = [p.strip() for p in parts if p.strip()]
+
+    # Eğer parçalar çok büyükse, karakter bazlı böl
     chunks = []
-    start = 0
     idx = 0
-    while start < len(clean):
-        end = start + settings.chunk_size
-        chunk = clean[start:end]
-        if chunk.strip():
-            chunks.append({
-                "id": f"doc{doc_id}_chunk{idx}",
-                "text": chunk,
-                "metadata": {"document_id": doc_id, "chunk_index": idx}
-            })
+    for part in parts:
+        if len(part) <= settings.chunk_size * 2:
+            chunks.append({"id": f"doc{doc_id}_chunk{idx}", "text": part,
+                           "metadata": {"document_id": doc_id, "chunk_index": idx}})
             idx += 1
-        start += settings.chunk_size - settings.chunk_overlap
+        else:
+            start = 0
+            while start < len(part):
+                end = start + settings.chunk_size
+                piece = part[start:end]
+                if piece.strip():
+                    chunks.append({"id": f"doc{doc_id}_chunk{idx}", "text": piece,
+                                   "metadata": {"document_id": doc_id, "chunk_index": idx}})
+                    idx += 1
+                start += settings.chunk_size - settings.chunk_overlap
     return chunks
 
 
