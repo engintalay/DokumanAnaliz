@@ -9,7 +9,7 @@ class Settings(BaseSettings):
 
     # Model names
     ocr_model_name: str = "chandra-ocr-2"
-    embedding_model_name: str = "bge-m3"
+    embedding_model_name: str = "text-embedding-bge-m3"
     qa_model_name: str = "nemotron-3-nano"
 
     # OCR
