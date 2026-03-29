@@ -32,7 +32,7 @@ async def ocr_image(image_path: str) -> str:
                 "messages": [{
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": "Convert this document to markdown. Preserve all layout, tables, and formatting."},
+                        {"type": "text", "text": "Convert this document to markdown. Preserve all layout, tables, and formatting. Write all image descriptions and alt texts in Turkish."},
                         {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{b64}"}}
                     ]
                 }]
