@@ -1,6 +1,7 @@
 import shutil
 from pathlib import Path
 from fastapi import APIRouter, UploadFile, HTTPException, BackgroundTasks
+from fastapi.responses import FileResponse
 from backend.config import settings
 from backend.database import get_db
 from backend.models import DocumentResponse
@@ -96,3 +97,16 @@ async def delete_document(doc_id: int):
         Path(row["original_path"]).unlink(missing_ok=True)
         db.execute("DELETE FROM documents WHERE id=?", (doc_id,))
     return {"message": "Silindi"}
+
+
+@router.get("/{doc_id}/file")
+async def get_document_file(doc_id: int):
+    """Dokümanın orijinal dosyasını döndürür."""
+    with get_db() as db:
+        row = db.execute("SELECT * FROM documents WHERE id=?", (doc_id,)).fetchone()
+    if not row:
+        raise HTTPException(404, "Doküman bulunamadı")
+    path = Path(row["original_path"])
+    if not path.exists():
+        raise HTTPException(404, "Dosya bulunamadı")
+    return FileResponse(path, filename=row["filename"])

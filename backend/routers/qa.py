@@ -38,6 +38,7 @@ async def stream_answer(question: str, document_id: int | None = None):
                 "POST",
                 f"{settings.lmstudio_base_url}/chat/completions",
                 headers={"Authorization": f"Bearer {settings.lmstudio_api_key}"},
+                timeout=300,
                 json={
                     "model": settings.qa_model_name,
                     "stream": True,
