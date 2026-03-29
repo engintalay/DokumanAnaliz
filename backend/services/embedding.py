@@ -8,7 +8,7 @@ _collection = _client.get_or_create_collection("documents")
 
 async def get_embedding(text: str) -> list[float]:
     """LMStudio'daki BGE-M3 ile embedding üretir."""
-    async with httpx.AsyncClient(timeout=60) as client:
+    async with httpx.AsyncClient(timeout=120) as client:
         resp = await client.post(
             f"{settings.lmstudio_base_url}/embeddings",
             headers={"Authorization": f"Bearer {settings.lmstudio_api_key}"},
