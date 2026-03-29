@@ -4,6 +4,15 @@ from pathlib import Path
 from backend.config import settings
 
 
+def _extract_text(response_json: dict) -> str:
+    """LMStudio response'undan metni çıkarır. content veya reasoning_content olabilir."""
+    choice = response_json["choices"][0]["message"]
+    text = choice.get("content") or ""
+    reasoning = choice.get("reasoning_content") or ""
+    # Chandra bazen reasoning_content'e yazar, content boş kalır
+    return text if text.strip() else reasoning
+
+
 async def ocr_image(image_path: str) -> str:
     """Tek bir görüntüyü LMStudio'daki Chandra OCR ile işler."""
     image_bytes = Path(image_path).read_bytes()
@@ -30,7 +39,7 @@ async def ocr_image(image_path: str) -> str:
             }
         )
         resp.raise_for_status()
-        return resp.json()["choices"][0]["message"]["content"]
+        return _extract_text(resp.json())
 
 
 async def ocr_pdf(pdf_path: str) -> list[str]:

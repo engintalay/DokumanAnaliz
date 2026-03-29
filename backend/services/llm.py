@@ -30,8 +30,13 @@ async def ask(question: str, document_id: int | None = None) -> dict:
                 ]
             }
         )
-        resp.raise_for_status()
-        answer = resp.json()["choices"][0]["message"]["content"]
+        if resp.status_code != 200:
+            error_detail = resp.text
+            return {"answer": f"LLM hatası ({resp.status_code}): {error_detail}", "sources": []}
+
+        data = resp.json()
+        choice = data["choices"][0]["message"]
+        answer = choice.get("content") or choice.get("reasoning_content") or "Cevap alınamadı."
 
     return {
         "answer": answer,

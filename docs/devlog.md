@@ -33,8 +33,14 @@
 - Vite + React + Tailwind CSS ile frontend oluşturuldu
 - Mobile-first responsive tasarım
 - Bileşenler: FileUpload (drag & drop), DocumentList (durum gösterimi), ChatPanel (soru-cevap)
-- Vite proxy ile backend'e bağlanıyor (`/api` → `localhost:8000`)
+- Vite proxy ile backend'e bağlanıyor (`/api` → `localhost:8080`)
 - Build başarılı test edildi
+
+### Hata Düzeltmeleri
+- **OCR text boş geliyordu:** Chandra OCR 2, `content` yerine `reasoning_content` alanına yazıyor. `_extract_text()` fonksiyonu eklendi, her iki alanı da kontrol ediyor.
+- **Q&A 400 Bad Request:** LMStudio'daki model ismi `nvidia/nemotron-3-nano` (prefix ile), `.env` güncellendi.
+- **Chunk'larda HTML tag'leri:** OCR çıktısı HTML içeriyordu, LLM bunu anlamakta zorlanıyordu. `chunk_text()` fonksiyonuna HTML temizleme eklendi.
+- **Backend portu:** 8000 meşguldu, 8080'e taşındı.
 
 ### Notlar
 - Chandra OCR GGUF: https://huggingface.co/prithivMLmods/chandra-ocr-2-GGUF

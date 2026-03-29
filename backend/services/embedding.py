@@ -19,13 +19,17 @@ async def get_embedding(text: str) -> list[float]:
 
 
 def chunk_text(text: str, doc_id: int) -> list[dict]:
-    """Metni chunk'lara böler."""
+    """Metni chunk'lara böler. HTML tag'lerini temizler."""
+    import re
+    clean = re.sub(r'<[^>]+>', ' ', text)
+    clean = re.sub(r'\s+', ' ', clean).strip()
+
     chunks = []
     start = 0
     idx = 0
-    while start < len(text):
+    while start < len(clean):
         end = start + settings.chunk_size
-        chunk = text[start:end]
+        chunk = clean[start:end]
         if chunk.strip():
             chunks.append({
                 "id": f"doc{doc_id}_chunk{idx}",
