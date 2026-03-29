@@ -29,6 +29,13 @@
 - Venv oluşturuldu, bağımlılıklar kuruldu
 - Dokümantasyon başlatıldı (architecture.md, devlog.md)
 
+### Frontend
+- Vite + React + Tailwind CSS ile frontend oluşturuldu
+- Mobile-first responsive tasarım
+- Bileşenler: FileUpload (drag & drop), DocumentList (durum gösterimi), ChatPanel (soru-cevap)
+- Vite proxy ile backend'e bağlanıyor (`/api` → `localhost:8000`)
+- Build başarılı test edildi
+
 ### Notlar
 - Chandra OCR GGUF: https://huggingface.co/prithivMLmods/chandra-ocr-2-GGUF
 - Q8_0 önerilen quant (5.16 GB), mmproj dosyası da gerekli
