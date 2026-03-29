@@ -32,11 +32,12 @@ async def process_document(doc_id: int, file_path: str):
                 (full_text, page_count, doc_id)
             )
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         with get_db() as db:
             db.execute(
                 "UPDATE documents SET status='error' WHERE id=?", (doc_id,)
             )
-        raise e
 
 
 @router.post("/upload", response_model=DocumentResponse)
