@@ -17,7 +17,7 @@ class Settings(BaseSettings):
 
     # App
     app_host: str = "0.0.0.0"
-    app_port: int = 8000
+    app_port: int = 8080
     upload_dir: str = "uploads"
     output_dir: str = "outputs"
 
